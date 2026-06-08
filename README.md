@@ -11,8 +11,8 @@ the focus here.
 
 ## What it does
 
-1. **Upload** a document in the browser (`.txt`/`.md`, or a `.pdf` with a text
-   layer — scanned image-only PDFs need OCR first).
+1. **Upload** a document in the browser (`.txt`/`.md`, a `.docx`, or a `.pdf`
+   with a text layer — scanned image-only PDFs need OCR first).
 2. The server extracts structured case data — `Aktenzeichen`, court, parties,
    deadlines, claim amount — via a Zod-validated `generateObject` call.
 3. For **every** field the model returns a verbatim source quote; deterministic
@@ -42,6 +42,7 @@ and drop it into the UI.
 | `src/app/page.tsx` | UI: upload, extract, split view (document + fields). |
 | `src/app/api/extract/route.ts` | Server route — runs extraction (model key stays server-side). |
 | `src/app/api/parse-pdf/route.ts` | Pulls the text layer out of an uploaded PDF (`unpdf`). |
+| `src/app/api/parse-docx/route.ts` | Pulls text out of an uploaded `.docx` (`mammoth`). |
 | `src/components/` | `FileDrop`, `DocumentViewer` (highlighting), `FieldList`. |
 | `src/schema/case-document.ts` | The Zod schema — the contract the model must satisfy. |
 | `src/extraction/prompt.ts` | Versioned extraction prompt (an artifact, not a buried string). |
