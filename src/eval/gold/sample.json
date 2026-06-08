@@ -1,0 +1,14 @@
+[
+  {
+    "id": "lg-berlin-27-O-145-25",
+    "document": "Landgericht Berlin\nAktenzeichen: 27 O 145/25\n\nURTEIL\n\nIn dem Rechtsstreit\n\nder Frau Anna Schäfer, Hauptstraße 12, 10115 Berlin,\n                                                        - Klägerin -\n\ngegen\n\ndie Muster GmbH, vertreten durch den Geschäftsführer Herrn Thomas Berger,\nIndustrieweg 8, 12109 Berlin,\n                                                        - Beklagte -\n\nhat das Landgericht Berlin durch den Vorsitzenden Richter am Landgericht Dr. Klein\nam 14. März 2026 für Recht erkannt:\n\nDie Beklagte wird verurteilt, an die Klägerin 12.500,00 EUR nebst Zinsen zu zahlen.\n\nGegen dieses Urteil kann innerhalb einer Berufungsfrist von einem Monat ab\nZustellung Berufung eingelegt werden.\n\nDie Zustellung des Urteils erfolgte am 20. März 2026.",
+    "expected": {
+      "documentType": "Urteil",
+      "aktenzeichen": "27 O 145/25",
+      "court": "Landgericht Berlin",
+      "parties": ["Anna Schäfer|Klaeger", "Muster GmbH|Beklagter"],
+      "deadlines": ["Berufungsfrist|"],
+      "claimAmount": "12500 EUR"
+    }
+  }
+]
