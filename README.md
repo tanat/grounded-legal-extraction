@@ -57,13 +57,9 @@ and drop it into the UI.
 See [DECISIONS.md](./DECISIONS.md) and [ARCHITECTURE.md](./ARCHITECTURE.md).
 The short version: **the LLM extracts; plain code verifies, locates, and computes.**
 
-## Status / next steps
+## Roadmap
 
-Teaching/portfolio scaffold. Digital PDFs work via `unpdf`; *scanned* PDFs still
-need an OCR stage (Tesseract / a vision model) — the obvious next extension. The
-gold set ships with one example — grow it to 20–30 (see `src/eval/gold/README.md`).
-
-## Learn
-
-- [learn/01-grounding.md](./learn/01-grounding.md) — why citations make LLM output trustworthy
-- [learn/02-evals.md](./learn/02-evals.md) — how to prove and improve extraction quality
+- **Scanned PDFs** — digital PDFs work via `unpdf`; image-only scans need an OCR
+  stage (Tesseract / a vision model) ahead of extraction.
+- **Broader eval set** — expanding the hand-labelled gold set across more document
+  types to tighten the per-field metrics.
