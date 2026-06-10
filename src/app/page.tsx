@@ -46,57 +46,121 @@ export default function Page() {
     }
   };
 
+  const charCount = text.length;
+
   return (
-    <main className="page">
-      <header className="page__header">
-        <h1>Grounded Legal Extraction</h1>
-        <p className="muted">
-          Upload a German/Swiss legal document — extracted case data is highlighted in the source,
-          every value tied to the text it came from.
-        </p>
+    <div className="app">
+      <header className="topbar">
+        <div className="topbar__inner">
+          <div className="brand">
+            <span className="brand__mark" aria-hidden="true">§</span>
+            <div className="brand__text">
+              <span className="brand__name">Grounded Legal Extraction</span>
+              <span className="brand__tag">German / Swiss case data, traced to the source</span>
+            </div>
+          </div>
+          <span className="pill">Demo</span>
+        </div>
       </header>
 
-      <FileDrop onText={onText} onError={setError} />
+      <main className="page">
+        <section className="hero">
+          <h1 className="hero__title">Every extracted value, tied to the text it came from.</h1>
+          <p className="hero__lead">
+            Upload a German or Swiss legal document. Each field is highlighted in the source — and
+            any quote that can&apos;t be located is flagged <em>unverified</em>, so you never trust a
+            value the model couldn&apos;t ground.
+          </p>
+        </section>
 
-      {text && (
-        <div className="toolbar">
-          <span className="muted">{fileName ?? 'document'} · {text.length} chars</span>
-          <button className="btn" onClick={extract} disabled={loading}>
-            {loading ? 'Extracting…' : 'Extract'}
-          </button>
-        </div>
-      )}
+        <FileDrop onText={onText} onError={setError} />
 
-      {error && <p className="error">⚠️ {error}</p>}
+        {text && (
+          <div className="toolbar">
+            <span className="toolbar__meta">
+              <span className="toolbar__file">{fileName ?? 'document'}</span>
+              <span className="toolbar__dot" aria-hidden="true">·</span>
+              <span className="muted">{charCount.toLocaleString()} characters</span>
+            </span>
+            <button className="btn" onClick={extract} disabled={loading}>
+              {loading ? (
+                <>
+                  <span className="btn__spinner" aria-hidden="true" />
+                  Extracting…
+                </>
+              ) : (
+                <>Extract case data</>
+              )}
+            </button>
+          </div>
+        )}
 
-      {result && result.unverified.length > 0 && (
-        <p className="warn-banner">
-          ⚠️ {result.unverified.length} citation(s) could not be verified against the source —
-          review the fields flagged “unverified”.
-        </p>
-      )}
+        {error && (
+          <p className="alert alert--error" role="alert">
+            <span className="alert__icon" aria-hidden="true">!</span>
+            {error}
+          </p>
+        )}
 
-      {text && (
-        <section className="split">
-          <DocumentViewer
-            text={text}
-            highlights={result?.highlights ?? []}
-            activeField={activeField}
-            onActivate={setActiveField}
-          />
-          <aside className="sidebar">
-            {result ? (
-              <FieldList
-                highlights={result.highlights}
+        {result && result.unverified.length > 0 && (
+          <p className="alert alert--warn" role="status">
+            <span className="alert__icon" aria-hidden="true">!</span>
+            <span>
+              <strong>{result.unverified.length}</strong> citation
+              {result.unverified.length > 1 ? 's' : ''} could not be verified against the source —
+              review the fields flagged <strong>unverified</strong>.
+            </span>
+          </p>
+        )}
+
+        {text && (
+          <section className="split">
+            <div className="panel panel--source">
+              <div className="panel__head">
+                <h2 className="panel__title">Source document</h2>
+                <span className="panel__hint">Hover a highlight to reveal its field</span>
+              </div>
+              <DocumentViewer
+                text={text}
+                highlights={result?.highlights ?? []}
                 activeField={activeField}
                 onActivate={setActiveField}
               />
-            ) : (
-              <p className="muted">Run “Extract” to see fields here.</p>
-            )}
-          </aside>
-        </section>
-      )}
-    </main>
+            </div>
+
+            <aside className="panel panel--fields sidebar">
+              <div className="panel__head">
+                <h2 className="panel__title">Extracted fields</h2>
+                {result && (
+                  <span className="panel__hint">{result.highlights.length} fields</span>
+                )}
+              </div>
+              {loading ? (
+                <div className="fields-skeleton" aria-hidden="true">
+                  <span className="skeleton-card" />
+                  <span className="skeleton-card" />
+                  <span className="skeleton-card" />
+                  <span className="skeleton-card" />
+                </div>
+              ) : result ? (
+                <FieldList
+                  highlights={result.highlights}
+                  activeField={activeField}
+                  onActivate={setActiveField}
+                />
+              ) : (
+                <div className="empty">
+                  <div className="empty__icon" aria-hidden="true">⤷</div>
+                  <p className="empty__title">No fields yet</p>
+                  <p className="empty__text">
+                    Run <strong>Extract case data</strong> to populate this panel.
+                  </p>
+                </div>
+              )}
+            </aside>
+          </section>
+        )}
+      </main>
+    </div>
   );
 }

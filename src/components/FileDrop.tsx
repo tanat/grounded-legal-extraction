@@ -56,9 +56,17 @@ export function FileDrop({
     }
   };
 
+  const openPicker = () => inputRef.current?.click();
+
   return (
     <div
-      className={`filedrop${dragging ? ' filedrop--active' : ''}`}
+      className={`filedrop${dragging ? ' filedrop--active' : ''}${
+        parsing ? ' filedrop--busy' : ''
+      }`}
+      role="button"
+      tabIndex={0}
+      aria-label="Upload a legal document"
+      aria-busy={parsing}
       onDragOver={(e) => {
         e.preventDefault();
         setDragging(true);
@@ -70,7 +78,13 @@ export function FileDrop({
         const file = e.dataTransfer.files[0];
         if (file) void handleFile(file);
       }}
-      onClick={() => inputRef.current?.click()}
+      onClick={openPicker}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openPicker();
+        }
+      }}
     >
       <input
         ref={inputRef}
@@ -83,16 +97,32 @@ export function FileDrop({
         }}
       />
       {parsing ? (
-        <p>
-          <strong>Extracting text…</strong>
-        </p>
+        <div className="filedrop__inner">
+          <span className="filedrop__spinner" aria-hidden="true" />
+          <p className="filedrop__title">Extracting text…</p>
+          <p className="filedrop__sub">Reading the document&apos;s text layer</p>
+        </div>
       ) : (
-        <>
-          <p>
-            <strong>Drop a document here</strong> or click to choose a file
+        <div className="filedrop__inner">
+          <span className="filedrop__icon" aria-hidden="true">
+            <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M12 16V4" />
+              <path d="m7 9 5-5 5 5" />
+              <path d="M4 16v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+            </svg>
+          </span>
+          <p className="filedrop__title">
+            Drop a document here, or <span className="filedrop__link">browse files</span>
           </p>
-          <p className="muted">.txt / .md / .pdf / .docx — scanned (image-only) PDFs need OCR first</p>
-        </>
+          <p className="filedrop__sub">
+            Supports
+            <span className="fmt">TXT</span>
+            <span className="fmt">MD</span>
+            <span className="fmt">PDF</span>
+            <span className="fmt">DOCX</span>
+          </p>
+          <p className="filedrop__note">Scanned (image-only) PDFs need OCR first</p>
+        </div>
       )}
     </div>
   );
